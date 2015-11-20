@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.InetAddress;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
@@ -24,10 +26,18 @@ public class BamAgent {
   @Value("${bam.url}")
   private String bamUrl;
 
+  @Value("${server.port}")
+  private int port;
+
   @PostConstruct
   public void start() {
     System.out.println("REGISTER!");
-    restTemplate.put(bamUrl, null);
+    try {
+      InetAddress host = InetAddress.getLocalHost();
+      restTemplate.put(bamUrl, new BamServerInfo(host.getHostName(), port));
+    } catch (Exception e) {
+      // should not happen.
+    }
   }
 
   @PreDestroy

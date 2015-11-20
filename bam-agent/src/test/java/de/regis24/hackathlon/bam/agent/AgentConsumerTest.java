@@ -8,13 +8,8 @@ import au.com.dius.pact.model.PactFragment;
 
 import org.junit.Rule;
 import org.junit.Test;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.event.ContextStartedEvent;
-import org.springframework.context.event.ContextStoppedEvent;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.client.RestTemplate;
-
-import static org.mockito.Mockito.mock;
 
 /**
  * @author sandornemeth
