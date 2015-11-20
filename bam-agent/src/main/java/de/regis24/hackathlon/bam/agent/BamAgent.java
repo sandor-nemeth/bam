@@ -1,43 +1,39 @@
 package de.regis24.hackathlon.bam.agent;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextStartedEvent;
-import org.springframework.context.event.ContextStoppedEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
+/**
+ * @author sandornemeth
+ */
+@Component
 public class BamAgent {
 
-  @Component
-  public static class StartEventListener implements ApplicationListener<ContextStartedEvent> {
+  private static final Logger logger = LoggerFactory.getLogger(BamAgent.class);
 
-    @Autowired
-    private RestTemplate restTemplate;
+  @Autowired
+  private RestTemplate restTemplate;
 
-    @Value("${bam.url}")
-    private String bamUrl;
+  @Value("${bam.url}")
+  private String bamUrl;
 
-    @Override
-    public void onApplicationEvent(ContextStartedEvent event) {
-      restTemplate.put(bamUrl, null);
-    }
+  @PostConstruct
+  public void start() {
+    System.out.println("REGISTER!");
+    restTemplate.put(bamUrl, null);
   }
 
-  @Component
-  public static class StopEventListener implements ApplicationListener<ContextStoppedEvent> {
-
-    @Autowired
-    private RestTemplate restTemplate;
-
-    @Value("${bam.url}")
-    private String bamUrl;
-
-    @Override
-    public void onApplicationEvent(ContextStoppedEvent event) {
-      restTemplate.delete(bamUrl);
-    }
+  @PreDestroy
+  public void stop() {
+    System.out.println("DEREGISTER!");
+    restTemplate.delete(bamUrl);
   }
 
 }

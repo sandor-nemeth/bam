@@ -1,7 +1,6 @@
 package de.regis24.hackathlon.bam.agent;
 
-import org.springframework.batch.core.configuration.JobRegistry;
-import org.springframework.batch.core.launch.NoSuchJobException;
+import org.springframework.batch.core.Job;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,19 +12,13 @@ import java.util.stream.Collectors;
 @RequestMapping("/bam")
 public class BamEndpoint {
 
-  @Autowired private JobRegistry jobRegistry;
+  @Autowired
+  private List<Job> jobs;
 
   @RequestMapping("jobs")
   public List<JobDescription> jobs() {
-    return jobRegistry.getJobNames().stream()
-        .map(jobName -> {
-          try {
-            return jobRegistry.getJob(jobName);
-          } catch (NoSuchJobException e) {
-            throw new RuntimeException(e);
-          }
-        })
-        .map(job -> new JobDescription(job.getName(), job.isRestartable()))
+    return jobs.stream()
+        .map(JobDescription::fromJob)
         .collect(Collectors.toList());
   }
 

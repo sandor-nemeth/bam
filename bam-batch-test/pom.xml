@@ -59,9 +59,19 @@
       <artifactId>spring-boot-starter-batch</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+    <dependency>
       <groupId>de.regis24.hackathlon.bam</groupId>
       <artifactId>bam-agent</artifactId>
       <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.16.6</version>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
 </project>

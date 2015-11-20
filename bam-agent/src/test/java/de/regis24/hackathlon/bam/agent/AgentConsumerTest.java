@@ -44,16 +44,11 @@ public class AgentConsumerTest {
   @Test
   @PactVerification
   public void verifyInteractions() {
-    BamAgent.StartEventListener listener = new BamAgent.StartEventListener();
+    BamAgent listener = new BamAgent();
     ReflectionTestUtils.setField(listener, "restTemplate", new RestTemplate());
     ReflectionTestUtils.setField(listener, "bamUrl", mockProvider.getConfig().url() + "/agent");
-    listener.onApplicationEvent(new ContextStartedEvent(mock(ApplicationContext.class)));
-
-    BamAgent.StopEventListener stopListener = new BamAgent.StopEventListener();
-    ReflectionTestUtils.setField(stopListener, "restTemplate", new RestTemplate());
-    ReflectionTestUtils
-        .setField(stopListener, "bamUrl", mockProvider.getConfig().url() + "/agent");
-    stopListener.onApplicationEvent(new ContextStoppedEvent(mock(ApplicationContext.class)));
+    listener.start();
+    listener.stop();
   }
 
 }
