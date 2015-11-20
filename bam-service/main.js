@@ -8,7 +8,7 @@ fs.readFile( __dirname + "/" + "agents.json", 'utf8', function (err, data) {
     agents = JSON.parse(data)
 })
 
-app.get('/agent/list', function (req, res) {
+app.get('/agent', function (req, res) {
   var ids = []
   for(id in agents){
     ids.push(id)
@@ -17,40 +17,42 @@ app.get('/agent/list', function (req, res) {
    res.end( JSON.stringify(ids) )
 })
 
-app.get('/agent/add/:id/:host/:port', function (req, res) {
-  var id = req.params.id
-  var host = req.params.host
-  var port = req.params.port
+app.put('/agent', function (req, res) {  
+  var newAgent = "";
   
-  var newAgent = {
-    "id":id,
-    "host":host,
-    "port":port
-  }
-  
-  agents[id] = newAgent
-  console.log("add agent " + id)
+  agents[newAgent] = newAgent
+  console.log("add agent " + newAgent)
   res.end(JSON.stringify({"status":"ok","newAgent":newAgent}))
   saveAgents()
 })
 
-app.get('/agent/detail/:id', function (req, res) {
-  var agent = agents[req.params.id]
-   res.end(JSON.stringify(agent))
-})
-
-app.get('/agent/delete/:id', function (req, res) {
-  var id = req.params.id
-  var agentToDelete = agents[id]
-  delete agents[id]
+app.delete('/agent', function (req, res) {
+  var agentToDelete = ""
+  delete agents[agentToDelete]
   
-  console.log("delete agent " + id)
-   res.end(JSON.stringify({"status":"ok","deletedAgend":agentToDelete}))
+  console.log("delete agent " + agentToDelete)
+   res.end(JSON.stringify({"status":"ok","agentToDelete":agentToDelete}))
    
    saveAgents()
 })
 
-var server = app.listen(8081, function () {
+app.get("/stats", function(req,res){
+  var stats = {
+    "numberOfExecutions":0,
+    "numberOfItemsProcessed":0,
+    "totalExecutionTime":0
+  }
+  
+  res.end(JSON.stringify(stats))
+})
+
+app.get("/jobs", function(req,res){
+  var jobs = []
+  
+  res.end(JSON.stringify(jobs))
+})
+
+var server = app.listen(3000, function () {
 
   var host = server.address().address
   var port = server.address().port
@@ -58,11 +60,7 @@ var server = app.listen(8081, function () {
   console.log("Example app listening at http://%s:%s", host, port)
 })
 
-function saveAgents(){
- fs.readFile( __dirname + "/" + "agents.json", 'utf8', function (err, data) {
-    agents = JSON.parse(data)
-  })
-  
+function saveAgents(){  
   fs.writeFile(__dirname + "/" + "agents.json", JSON.stringify(agents),  function(err) {
    if (err) {
        return console.error(err);
