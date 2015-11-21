@@ -53,26 +53,17 @@ app.get("/stats", function(req,res){
     "numberOfItemsProcessed":0,
     "totalExecutionTime":0
   }
-
-  var i = 0
-
-  for(agentId in agents){
-    request("http://" + agentId + "/bam/stats", function (error, response, body) {
-      i++
-
-      if (!error && response.statusCode == 200) {
-        stats.numberOfExecutions = body.numberOfExecutions
-        stats.numberOfItemsProcessed = body.numberOfItemsProcessed
-        stats.totalExecutionTime = body.totalExecutionTime
-      }else{
-        console.log(error + " " + response + " " + body)
-      }
-
-      if( i == agents.length){
-          res.end(JSON.stringify(stats))
-      }
-    })
+  var handler = function(body) {
+    stats.numberOfExecutions = body.numberOfExecutions
+    stats.numberOfItemsProcessed = body.numberOfItemsProcessed
+    stats.totalExecutionTime = body.totalExecutionTime
   }
+  var callback = function() {
+    res.end(JSON.stringify(stats))
+  }
+
+  callAgents("/bam/stats", handler, callback);
+
 })
 
 app.get("/jobs", function(req,res){
@@ -96,6 +87,25 @@ app.get("/jobs", function(req,res){
     })
   }
 })
+
+callAgents = function(target, handler, callback) {
+  var i = 0;
+  for (agentId in agents) {
+    if (agentId === "undefined:undefined") { ++i; continue; }
+    console.log("Trying agent: " + agentId);
+    request("http://" + agentId + target, function(error, response, body) {
+      ++i;
+      if (!error && response.statusCode == 200) {
+        handler(body)
+      } else {
+        console.log(error + " " + response + " " + body);
+      }
+      if (i = agents.length - 1) {
+        callback()
+      }
+    });
+  }
+}
 
 var server = app.listen(4000, function () {
 

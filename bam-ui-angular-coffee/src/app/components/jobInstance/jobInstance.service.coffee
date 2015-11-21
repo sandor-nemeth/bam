@@ -2,6 +2,9 @@ angular.module 'bamUiAngularCoffee'
   .service 'jobInstance', ($http) ->
     'ngInject'
 
+    getStats = ->
+      $http.get 'http://localhost:4000/stats', params: {}
+
     getJobInstances = ->
       $http.get '/jobInstances.json', params: {  }
 
@@ -10,4 +13,5 @@ angular.module 'bamUiAngularCoffee'
 
     @getJobInstances = getJobInstances
     @getJobDetails = getJobDetails
+    @stats = getStats
     return

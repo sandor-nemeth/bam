@@ -1,7 +1,61 @@
 lte-navbar
 div.content-wrapper(style="min-height:808px;")
-  section.content.container
-    lte-content
-
+  section.content-header
+    .container
+      .row
+        .col-sm-12
+          h1 Dashboard
+  section.content
+    .container
+      .row
+        .col-sm-4
+          .small-box.bg-aqua
+            .inner
+              h3 {{main.stats.numberOfExecutions}}
+              p Jobs executed
+            .icon
+              i.ion.ion-network
+              
+        .col-sm-4
+          .small-box.bg-green
+            .inner
+              h3 {{main.stats.numberOfProcessedItems}}
+              p Items processed
+            .icon
+              i.ion.ion-code-download
+        .col-sm-4
+          .small-box.bg-yellow
+            .inner
+              h3 {{main.stats.totalExecutedTime}} s
+              p Total running time
+            .icon
+              i.ion.ion-clock
+      .row
+        .col-sm-12
+          .box
+            .box-header
+              h3.box-title Last job executions
+            .box-body.table-responsive.no-padding
+              table.table.table-hover
+                thead
+                  tr
+                    th Name
+                    th Host
+                    th Items processed
+                    th Items skipped
+                    th Status
+                    th
+                tbody
+                  tr(ng-repeat="job in main.jobStats")
+                    td {{job.jobName}}
+                    td {{job.host}}
+                    td {{job.numberOfWrittenItems}}
+                    td {{job.numberOfSkippedItems}}
+                    td
+                      span.label.label-success(ng-if="job.resultOfLastExecution=='COMPLETED'") {{job.resultOfLastExecution}}
+                      span.label.label-warning(ng-if="job.resultOfLastExecution!='COMPLETED'") {{job.resultOfLastExecution}}
+                    td
+                      button.btn.btn-link(ui-sref="jobDetails({jobName: job.jobName, host: job.host})")
+                        i.fa.fa-search
 footer.main-footer
   lte-footer

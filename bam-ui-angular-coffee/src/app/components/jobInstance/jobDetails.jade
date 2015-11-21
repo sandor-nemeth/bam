@@ -1,12 +1,15 @@
 lte-navbar
 div.content-wrapper(style="min-height:808px;")
-  .container
-    section.content-header
-      h1 {{vm.jobName}}
-    section.content
-      div.row
+  section.content-header
+    .container
+      .row
+        .col-sm-12
+          h1 {{vm.jobName}}
+  section.content
+    .container 
+      .row
         .col-xs-12
-          .box
+          .box.n
             .box-header
               h3.box-title Last job executions
             // /.box-header

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -35,7 +34,7 @@ public class BamAgent {
     System.out.println("REGISTER!");
     try {
       InetAddress host = InetAddress.getLocalHost();
-      restTemplate.put(bamUrl, new BamServerInfo(host.getHostName(), port));
+      restTemplate.put(bamUrl, new BamServerInfo(host.getHostAddress(), port));
     } catch (Exception e) {
       // should not happen.
     }
@@ -43,14 +42,14 @@ public class BamAgent {
 
   @PreDestroy
   public void stop() {
-	  try {
-		InetAddress host = InetAddress.getLocalHost();
-		String url = bamUrl + "/" + host.getHostName() + "/" + port;
-		System.out.println("DEREGISTER!");
-	    restTemplate.delete(url);
-	  } catch (Exception e) {
-	      // should not happen.
-	    }
+    try {
+      InetAddress host = InetAddress.getLocalHost();
+      String url = bamUrl + "/" + host.getHostAddress() + "/" + port;
+      System.out.println("DEREGISTER!");
+      restTemplate.delete(url);
+    } catch (Exception e) {
+      // should not happen.
+    }
   }
 
 }

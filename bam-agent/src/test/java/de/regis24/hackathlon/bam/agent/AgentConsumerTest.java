@@ -35,7 +35,7 @@ public class AgentConsumerTest {
         .willRespondWith()
         .status(200)
         .uponReceiving("Remove service")
-        .path("/agent/" + host.getHostName() +"/" + port)
+        .path("/agent/" + host.getHostAddress() +"/" + port)
         .method("DELETE")
         .willRespondWith()
         .status(200)

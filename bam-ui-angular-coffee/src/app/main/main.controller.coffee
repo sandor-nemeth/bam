@@ -1,31 +1,15 @@
 angular.module 'bamUiAngularCoffee'
-  .controller 'MainController', ($timeout, webDevTec, toastr, jobInstance) ->
+  .controller 'MainController', (jobs) ->
     'ngInject'
     vm = this
     activate = ->
-      getWebDevTec()
-      $timeout (->
-        vm.classAnimation = 'rubberBand'
+      jobs.stats().success (data) ->
+        vm.stats = data
         return
-      ), 4000
-      return
-
-    showToastr = ->
-      toastr.info 'Fork <a href="https://github.com/Swiip/generator-gulp-angular" target="_blank"><b>generator-gulp-angular</b></a>'
-      vm.classAnimation = ''
-      return
-
-    getWebDevTec = ->
-      vm.awesomeThings = webDevTec.getTec()
-      angular.forEach vm.awesomeThings, (awesomeThing) ->
-        awesomeThing.rank = Math.random()
+      jobs.jobStats().success (data) ->
+        vm.jobStats = data
         return
       return
 
-    vm.awesomeThings = []
-    vm.classAnimation = ''
-    vm.creationDate = 1448032262612
-    vm.showToastr = showToastr
     activate()
     return
-
