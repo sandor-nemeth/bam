@@ -14,7 +14,7 @@ public class BamJdbcDao {
   private static final String QUERY_NUMBER_OF_WRITTEN_ITEMS =
       "SELECT sum(WRITE_COUNT) FROM %PREFIX%STEP_EXECUTION";
   private static final String QUERY_TOTAL_EXECUTION_TIME =
-      "SELECT sum(a) FROM (SELECT datediff('SECOND', END_TIME, START_TIME) as a FROM "
+      "SELECT sum(a) FROM (SELECT datediff('SECOND', START_TIME, END_TIME) as a FROM "
       + "%PREFIX%JOB_EXECUTION)";
 
   @Autowired

@@ -34,9 +34,7 @@ angular.module 'bamUiAngularCoffee'
 
     skippedItems = (jobExecution) ->
       skippedItems = 0
-      angular.forEach jobExecution.stepExecutions, (v) ->
-        skippedItems += v.readSkipCount + v.processSkipCount + v.writeSkipCount
-        return
+      skippedItems += v.readSkipCount + v.processSkipCount + v.writeSkipCount for v in jobExecution.stepExecutions
       skippedItems
 
     vm.processedItems = processedItems
