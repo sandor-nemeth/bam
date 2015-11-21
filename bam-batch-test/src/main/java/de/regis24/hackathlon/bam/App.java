@@ -33,8 +33,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import de.regis24.hackathlon.bam.App.Insolvency;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Hello world!
@@ -154,7 +156,7 @@ public class App {
   }
   
   @Data
-  @Builder
+  @NoArgsConstructor
   public static class Insolvency{
 	  private String name;
   }
