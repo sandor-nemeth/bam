@@ -13,6 +13,13 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.NonTransientResourceException;
 import org.springframework.batch.item.ParseException;
 import org.springframework.batch.item.UnexpectedInputException;
+import org.springframework.batch.item.file.FlatFileItemReader;
+import org.springframework.batch.item.file.LineMapper;
+import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
+import org.springframework.batch.item.file.mapping.DefaultLineMapper;
+import org.springframework.batch.item.file.mapping.JsonLineMapper;
+import org.springframework.batch.item.file.separator.JsonRecordSeparatorPolicy;
+import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -20,6 +27,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -109,19 +117,25 @@ public class App {
   }
   
   @Bean
-  public ItemReader<Insolvency> insolvencyReader(){
-	  return () -> {
-		  logger.info("reading insolvency");
-		  Thread.sleep(1000);
-		  return Insolvency.builder().build();
-	};
+  public ItemReader<Insolvency> insolvencyReader(){	  
+	  FlatFileItemReader<Insolvency> reader = new FlatFileItemReader<Insolvency>();
+      reader.setResource(new ClassPathResource("insolvency.csv"));
+      reader.setLineMapper(new DefaultLineMapper<Insolvency>() {{
+          setLineTokenizer(new DelimitedLineTokenizer() {{
+              setNames(new String[] { "name" });
+          }});
+          setFieldSetMapper(new BeanWrapperFieldSetMapper<Insolvency>() {{
+              setTargetType(Insolvency.class);
+          }});
+      }});
+      return reader;
   }
   
   @Bean
   public ItemProcessor<Insolvency, Insolvency> insolvencyProcessor(){
 	  return i -> {
-		  logger.info("processing insolvency");
-		  Thread.sleep(500);
+		  logger.info("processing insolvency:" + i.getName());
+		  Thread.sleep(200);
 		  return i;
 	  };
   }
@@ -142,7 +156,7 @@ public class App {
   @Data
   @Builder
   public static class Insolvency{
-	  
+	  private String name;
   }
 
 }
