@@ -18,14 +18,14 @@ app.get('/agent', function (req, res) {
   for(id in agents){
     ids.push(id)
   }
-  
+
    res.end( JSON.stringify(ids) )
 })
 
-app.put('/agent', function (req, res) {  
+app.put('/agent', function (req, res) {
   var newAgent = req.body
   var newAgentId = agentToId(newAgent)
-  
+
   agents[newAgentId] = newAgent
   console.log("add agent " + newAgentId)
   res.end(JSON.stringify({"status":"ok","newAgent":newAgent}))
@@ -37,13 +37,13 @@ app.delete('/agent/:host/:port', function (req, res) {
     "host":req.params.host,
     "port":req.params.port
   }
-  
+
   var agentToDeleteId = agentToId(agentToDelete)
   delete agents[agentToDeleteId]
-  
+
   console.log("delete agent " + agentToDeleteId)
    res.end(JSON.stringify({"status":"ok","agentToDelete":agentToDelete}))
-   
+
    saveAgents()
 })
 
@@ -53,51 +53,51 @@ app.get("/stats", function(req,res){
     "numberOfItemsProcessed":0,
     "totalExecutionTime":0
   }
-  
+
   var i = 0
-  
+
   for(agentId in agents){
     request("http://" + agentId + "/bam/stats", function (error, response, body) {
       i++
-      
-      if (!error && response.statusCode == 200) {        
+
+      if (!error && response.statusCode == 200) {
         stats.numberOfExecutions = body.numberOfExecutions
         stats.numberOfItemsProcessed = body.numberOfItemsProcessed
-        stats.totalExecutionTime = body.totalExecutionTime        
+        stats.totalExecutionTime = body.totalExecutionTime
       }else{
         console.log(error + " " + response + " " + body)
       }
-      
+
       if( i == agents.length){
           res.end(JSON.stringify(stats))
       }
     })
-  }  
+  }
 })
 
 app.get("/jobs", function(req,res){
   var jobs = []
-  
+
   var i = 0
-  
+
   for(agentId in agents){
     request("http://" + agentId + "/bam/jobs", function (error, response, body) {
       i++
-      
-      if (!error && response.statusCode == 200) {  
-        jobs[jobs.length] = body      
+
+      if (!error && response.statusCode == 200) {
+        jobs[jobs.length] = body
       }else{
         console.log(error + " " + response + " " + body)
       }
-      
+
       if( i == agents.length){
           res.end(JSON.stringify(jobs))
       }
     })
-  }  
+  }
 })
 
-var server = app.listen(3000, function () {
+var server = app.listen(4000, function () {
 
   var host = server.address().address
   var port = server.address().port
@@ -105,12 +105,12 @@ var server = app.listen(3000, function () {
   console.log("Example app listening at http://%s:%s", host, port)
 })
 
-function saveAgents(){  
+function saveAgents(){
   fs.writeFile(__dirname + "/" + "agents.json", JSON.stringify(agents),  function(err) {
    if (err) {
        return console.error(err);
-   }   
-  }) 
+   }
+  })
 }
 
 function agentToId(agent){

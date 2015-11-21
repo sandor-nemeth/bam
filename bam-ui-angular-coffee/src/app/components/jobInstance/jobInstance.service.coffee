@@ -3,7 +3,11 @@ angular.module 'bamUiAngularCoffee'
     'ngInject'
 
     getJobInstances = ->
-      request = $http.get '/jobInstances.json', params: {  }
+      $http.get '/jobInstances.json', params: {  }
+
+    getJobDetails = (host, jobName)->
+      $http.get '/jobDetails.json', params: {}
 
     @getJobInstances = getJobInstances
+    @getJobDetails = getJobDetails
     return

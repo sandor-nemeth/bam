@@ -1,17 +1,121 @@
 [
   {
-    "jobName":"inboasImport",
-    "host":"inobas.app02.regis.de",
-    "numberOfItemsProcessed":"999",
-    "numberOfItemsSkipped":"0",
-    "resultOfLastExecution":"success"
+    "jobName":"bisnoodeImport",
+    "executionId": "1",
+    "startDate": "2015-01-01 03:03:03",
+    "endDate": "2015-01-01 04:04:04",
+    "exitStatus": "SUCCESS",
+    "steps": {
+      "step1": {
+        "readCount": 30,
+        "readSkipCount": 1,
+        "processCount": 30,
+        "processSkipCount": 0,
+        "writeCount":30,
+        "writeSkipCount":0
+      }
+    }
   },
   {
     "jobName":"bisnoodeImport",
-    "host":"bis.app02.regis.de",
-    "numberOfItemsProcessed":"42344",
-    "numberOfItemsSkipped":"0",
-    "resultOfLastExecution":"success"
+    "executionId": "1",
+    "startDate": "2015-01-01 03:03:03",
+    "endDate": "2015-01-01 04:04:04",
+    "exitStatus": "SUCCESS",
+    "steps": {
+      "step1": {
+        "readCount": 30,
+        "readSkipCount": 1,
+        "processCount": 30,
+        "processSkipCount": 0,
+        "writeCount":30,
+        "writeSkipCount":0
+      }
+    }
+  },
+  {
+    "jobName":"bisnoodeImport",
+    "executionId": "1",
+    "startDate": "2015-01-01 03:03:03",
+    "endDate": "2015-01-01 04:04:04",
+    "exitStatus": "SUCCESS",
+    "steps": {
+      "step1": {
+        "readCount": 30,
+        "readSkipCount": 1,
+        "processCount": 30,
+        "processSkipCount": 0,
+        "writeCount":30,
+        "writeSkipCount":0
+      }
+    }
+  },
+  {
+    "jobName":"bisnoodeImport",
+    "executionId": "1",
+    "startDate": "2015-01-01 03:03:03",
+    "endDate": "2015-01-01 04:04:04",
+    "exitStatus": "SUCCESS",
+    "steps": {
+      "step1": {
+        "readCount": 30,
+        "readSkipCount": 1,
+        "processCount": 30,
+        "processSkipCount": 0,
+        "writeCount":30,
+        "writeSkipCount":0
+      }
+    }
+  },
+  {
+    "jobName":"bisnoodeImport",
+    "executionId": "1",
+    "startDate": "2015-01-01 03:03:03",
+    "endDate": "2015-01-01 04:04:04",
+    "exitStatus": "SUCCESS",
+    "steps": {
+      "step1": {
+        "readCount": 30,
+        "readSkipCount": 1,
+        "processCount": 30,
+        "processSkipCount": 0,
+        "writeCount":30,
+        "writeSkipCount":0
+      }
+    }
+  }
+  ,{
+    "jobName":"bisnoodeImport",
+    "executionId": "1",
+    "startDate": "2015-01-01 03:03:03",
+    "endDate": "2015-01-01 04:04:04",
+    "exitStatus": "WARNING",
+    "steps": {
+      "step1": {
+        "readCount": 30,
+        "readSkipCount": 1,
+        "processCount": 30,
+        "processSkipCount": 0,
+        "writeCount":30,
+        "writeSkipCount":0
+      }
+    }
+  }
+  ,{
+    "jobName":"bisnoodeImport",
+    "executionId": "1",
+    "startDate": "2015-01-01 03:03:03",
+    "endDate": "2015-01-01 04:04:04",
+    "exitStatus": "SUCCESS",
+    "steps": {
+      "step1": {
+        "readCount": 30,
+        "readSkipCount": 1,
+        "processCount": 30,
+        "processSkipCount": 0,
+        "writeCount":30,
+        "writeSkipCount":0
+      }
+    }
   }
 ]
-

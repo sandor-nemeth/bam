@@ -9,9 +9,9 @@ angular.module 'bamUiAngularCoffee'
       return
 
     getDetails = ->
-      vm.jobInstance = jobInstance
+      jobInstance.getJobDetails($stateParams.host, $stateParams.jobName).success (data) ->
+        vm.details = data 
       return
 
     activate()
     return
-

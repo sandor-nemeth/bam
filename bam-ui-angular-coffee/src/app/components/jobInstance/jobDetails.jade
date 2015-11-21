@@ -1,9 +1,25 @@
 lte-navbar
-aside.main-sidebar
-  lte-sidebar
 div.content-wrapper(style="min-height:808px;")
-  section.content
-    p {{ job.jobName }} @ {{ job.host }}
+  .container
+    section.content-header
+      h1 {{vm.jobName}}
+    section.content
+      div.row
+        .col-xs-12
+          .box
+            .box-header
+              h3.box-title Last job executions
+            // /.box-header
+            .box-body.no-padding
+              div(ng-repeat="ex in vm.details")
+                div
+                  span Execution {{ex.executionId}} from {{ex.startDate}} to {{ex.endDate}} with status
+                    span.label.label-success(ng-if="ex.exitStatus=='SUCCESS'") {{ex.exitStatus}}
+                    span.label.label-warning(ng-if="ex.exitStatus!='SUCCESS'") {{ex.exitStatus}}
+                    button.btn(ng-click='ex.visible=!ex.visible') show/hide
+                div(ng-show="ex.visible")
+                  p Some details here
+          
 
 footer.main-footer
   lte-footer

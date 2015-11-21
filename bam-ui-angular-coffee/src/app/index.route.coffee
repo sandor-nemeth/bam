@@ -11,6 +11,6 @@ angular.module 'bamUiAngularCoffee'
         url: '/job-details/:host/:jobName'
         templateUrl: 'app/components/jobInstance/jobDetails.html'
         controller: 'JobInstanceController'
-        controllerAs: 'job'
+        controllerAs: 'vm'
 
     $urlRouterProvider.otherwise '/'
