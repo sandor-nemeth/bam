@@ -28,14 +28,6 @@ public class BamEndpoint {
   @Autowired
   private JobExplorer jobExplorer;
 
-
-  @RequestMapping("jobs")
-  public List<JobDescription> jobs() {
-    return jobs.stream()
-        .map(JobDescription::fromJob)
-        .collect(Collectors.toList());
-  }
-
   @RequestMapping("stats")
   public Stats stats() {
     return Stats.builder()
