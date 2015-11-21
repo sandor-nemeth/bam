@@ -6,11 +6,19 @@ import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobInstance;
 import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.JobParametersInvalidException;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.explore.JobExplorer;
+import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.NoSuchJobException;
+import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
+import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
+import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.batch.item.ExecutionContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.core.env.Environment;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +31,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
+
+import javax.batch.operations.JobOperator;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -37,6 +47,10 @@ public class BamEndpoint {
   private BamJdbcDao bamJdbcDao;
   @Autowired
   private JobExplorer jobExplorer;
+  @Autowired
+  private JobLauncher jobLauncher;
+  @Autowired
+  private ApplicationContext ctx;
 
   @RequestMapping("stats")
   public Stats stats() {
@@ -66,6 +80,15 @@ public class BamEndpoint {
           .collect(Collectors.toList());
     }
     return new ArrayList<>();
+  }
+  
+  @RequestMapping("job/{jobName}/run")
+  public void runJob(@PathVariable("jobName") String jobName){
+	  Job job = (Job) ctx.getBean(jobName);
+	  try {
+		jobLauncher.run(job, new JobParametersBuilder().toJobParameters());
+	} catch (Exception e) {
+	}
   }
 
   private JobStats toJobStats(JobExecution jobExecution) {

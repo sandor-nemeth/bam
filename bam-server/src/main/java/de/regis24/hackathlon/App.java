@@ -117,6 +117,18 @@ public class App {
       }
       return null;
     }
+    
+    @RequestMapping(value = "job/{host}/{port}/{jobName}/run", method = RequestMethod.GET, produces =
+            MediaType.APPLICATION_JSON_VALUE)
+        public void runJob(@PathVariable("host") String host,
+                                @PathVariable("port") int port,
+                                @PathVariable("jobName") String jobName) {
+          for (ServerInfo agent : registry.agents) {
+            if (agent.getHost().equals(host) && agent.getPort() == port) {
+               restTemplate.getForEntity(url(agent, "/bam/job/" + jobName + "/run"), Map[].class).getBody();
+            }
+          }
+        }
   }
 
   @Getter
