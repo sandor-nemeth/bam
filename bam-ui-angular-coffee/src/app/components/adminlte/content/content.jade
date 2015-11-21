@@ -1,0 +1,91 @@
+div.row
+  .col-lg-3.col-xs-6
+    // small box
+    .small-box.bg-aqua
+      .inner
+        h3 150
+        p New Orders
+      .icon
+        i.ion.ion-bag
+      a.small-box-footer(href='#')
+        | More info
+        i.fa.fa-arrow-circle-right
+  // ./col
+  .col-lg-3.col-xs-6
+    // small box
+    .small-box.bg-green
+      .inner
+        h3
+          | 53
+          sup(style='font-size: 20px') %
+        p Bounce Rate
+      .icon
+        i.ion.ion-stats-bars
+      a.small-box-footer(href='#')
+        | More info
+        i.fa.fa-arrow-circle-right
+  // ./col
+  .col-lg-3.col-xs-6
+    // small box
+    .small-box.bg-yellow
+      .inner
+        h3 44
+        p User Registrations
+      .icon
+        i.ion.ion-person-add
+      a.small-box-footer(href='#')
+        | More info
+        i.fa.fa-arrow-circle-right
+  // ./col
+  .col-lg-3.col-xs-6
+    // small box
+    .small-box.bg-red
+      .inner
+        h3 65
+        p Unique Visitors
+      .icon
+        i.ion.ion-pie-graph
+      a.small-box-footer(href='#')
+        | More info
+        i.fa.fa-arrow-circle-right
+  // ./col
+
+
+div.jade
+  .col-xs-12
+    .box
+      .box-header
+        h3.box-title Last job executions
+        .box-tools
+          .input-group.input-group-sm(style='width: 150px;')
+            input.form-control.pull-right(name='table_search', placeholder='Search', type='text')
+            .input-group-btn
+              button.btn.btn-default(type='submit')
+                i.fa.fa-search
+      // /.box-header
+      .box-body.table-responsive.no-padding
+        table.table.table-hover
+          thead
+            tr
+              th Name
+              th Host
+              th Items processed
+              th Items skipped
+              th Status
+              th
+          tbody
+            tr(ng-repeat="job in vm.jobInstances")
+              td {{job.jobName}}
+              td {{job.host}}
+              td {{job.numberOfItemsProcessed}}
+              td {{job.numberOfItemsSkipped}}
+              td
+                span.label.label-warning {{job.resultOfLastExecution}}
+              td
+                button.btn.btn-link(ui-sref="jobDetails({jobName: job.jobName, host: job.host})")
+                  i.fa.fa-search
+
+
+
+             // /.box-body
+    // /.box

@@ -1,5 +1,5 @@
 angular.module 'bamUiAngularCoffee'
-  .controller 'MainController', ($timeout, webDevTec, toastr) ->
+  .controller 'MainController', ($timeout, webDevTec, toastr, jobInstance) ->
     'ngInject'
     vm = this
     activate = ->
@@ -28,3 +28,4 @@ angular.module 'bamUiAngularCoffee'
     vm.showToastr = showToastr
     activate()
     return
+
