@@ -1,0 +1,17 @@
+[
+  {
+    "jobName":"inboasImport",
+    "host":"inobas.app02.regis.de",
+    "numberOfItemsProcessed":"999",
+    "numberOfItemsSkipped":"0",
+    "resultOfLastExecution":"success"
+  },
+  {
+    "jobName":"bisnoodeImport",
+    "host":"bis.app02.regis.de",
+    "numberOfItemsProcessed":"42344",
+    "numberOfItemsSkipped":"0",
+    "resultOfLastExecution":"success"
+  }
+]
+
