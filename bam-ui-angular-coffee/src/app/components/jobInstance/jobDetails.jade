@@ -4,25 +4,138 @@ div.content-wrapper(style="min-height:808px;")
     .container
       .row
         .col-sm-12
-          h1 {{vm.jobName}}
+          h1 {{vm.jobName}} 
+            sup 
+              span.header-label.label.label-success {{vm.details[vm.details.length - 1].exitStatus.exitCode}}
+            .pull-right
+              button.btn.btn-danger
+                i.fa.fa-remove
+                | &nbsp;Disable job
+              button.btn.btn-success
+                i.fa.fa-repeat
+                | &nbsp;Start new execution
   section.content
     .container 
       .row
-        .col-xs-12
-          .box.n
+        .col-xs-9
+          .box
             .box-header
-              h3.box-title Last job executions
+              h3.box-title Job details
+            .box-body.no-padding
+              table.table.table-bordered.table-hover
+                tbody
+                  tr
+                    td Name
+                    td {{vm.jobName}}
+                  tr
+                    td Host
+                    td {{vm.host}}
+                  tr
+                    td Version
+                    td {{ vm.details[vm.details.length - 1].jobInstance.version }}
+                  tr
+                    td Last elapsed time
+                    td {{ vm.details[vm.details.length - 1].endTime - vm.details[vm.details.length - 1].startTime}}
+                  tr
+                    td Number of steps
+                    td {{vm.numberOfSteps}}
+                  
+        .col-xs-3
+          .row
+            .col-sm-12
+              .small-box.bg-aqua
+                .inner
+                  h3 {{vm.details.length}}
+                  p times this job run till today
+                .icon
+                  i.ion.ion-network
+          .row
+            .col-sm-12
+              .small-box.bg-green
+                .inner
+                  h3 {{vm.totalItemsProcessed}}
+                  p processed items by this job
+                .icon
+                  i.ion.ion-network
+      .row
+        .col-xs-12
+          .box
+            .box-header
+              h3.box-title Executions
             // /.box-header
             .box-body.no-padding
               div(ng-repeat="ex in vm.details")
-                div
-                  span Execution {{ex.executionId}} from {{ex.startDate}} to {{ex.endDate}} with status
-                    span.label.label-success(ng-if="ex.exitStatus=='SUCCESS'") {{ex.exitStatus}}
-                    span.label.label-warning(ng-if="ex.exitStatus!='SUCCESS'") {{ex.exitStatus}}
-                    button.btn(ng-click='ex.visible=!ex.visible') show/hide
-                div(ng-show="ex.visible")
-                  p Some details here
-          
-
+                .row.data(ng-class="{'expanded': ex.visible}")
+                  .col-sm-12
+                    div.pull-left
+                      button.btn.btn-link(ng-click='ex.visible=!ex.visible')
+                        i.fa.fa-eye
+                    div.pull-right
+                      button.btn.btn-warning
+                        i.fa.fa-repeat
+                    div.data-content
+                      | Execution from 
+                      b {{ex.startTime | amDateFormat: 'YYYY.MM.DD hh:mm:ss'}} 
+                      | until 
+                      b {{ex.endTime | amDateFormat: 'YYYY.MM.DD hh:mm:ss'}} 
+                      | with {{ vm.processedItems(ex) }} processed items
+                      | while {{ vm.skippedItems(ex) }} was skipped
+                      | and the execution result is 
+                      span.label(ng-class="{'label-success': '{{ex.exitStatus.exitCode}}'=='COMPLETED', 'label-warning': '{{ex.exitStatus.exitCode}}'!='COMPLETED'}") {{ex.exitStatus.exitCode}}
+                .row(ng-show='ex.visible').extended-data
+                  .col-sm-12
+                    .row 
+                      .col-sm-5 
+                        h4 parameters
+                        pre {{ex.jobParameters | json}}
+                      .col-sm-7
+                        h4 Properties
+                        table.table.table-bordered.table-hover
+                          tbody 
+                            tr
+                              td Start time
+                              td {{ex.startTime | amDateFormat: 'YYYY.MM.DD hh:mm:ss'}} 
+                            tr
+                              td End time
+                              td {{ex.endTime | amDateFormat: 'YYYY.MM.DD hh:mm:ss'}} 
+                            tr
+                              td Last updated
+                              td {{ex.lastUpdated | amDateFormat: 'YYYY.MM.DD hh:mm:ss'}} 
+                            tr
+                              td Execution context
+                              td {{ex.executionContext | json}}
+                    .row
+                      .col-sm-12
+                        h4 Steps
+                        table.table.table-bordered.table-hover
+                          thead
+                            th Name 
+                            th Start time
+                            th End time
+                            th Read count
+                            th Read skip count
+                            th Process count
+                            th Process skip count
+                            th Write count
+                            th Write skip count
+                            th Committed
+                            th Rolled back
+                            th Status
+                          tbody
+                            tr(ng-repeat="s in ex.stepExecutions")
+                              td {{s.stepName}}
+                              td {{s.startTime | amDateFormat: 'YYYY.MM.DD hh:mm:ss'}} 
+                              td {{s.endTime | amDateFormat: 'YYYY.MM.DD hh:mm:ss'}} 
+                              td {{s.readCount}}
+                              td {{s.readSkipCount}}
+                              td {{s.processCount}}
+                              td {{s.processSkipCount}}
+                              td {{s.writeCount}}
+                              td {{s.writeSkipCount}}
+                              td {{s.commitCount}}
+                              td {{s.rollbackCount}}
+                              td 
+                                span.label(ng-class="{'label-success': '{{s.exitStatus.exitCode}}'=='COMPLETED', 'label-warning': '{{s.exitStatus.exitCode}}'!='COMPLETED'}") {{s.exitStatus.exitCode}}
+                      
 footer.main-footer
   lte-footer
