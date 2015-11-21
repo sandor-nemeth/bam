@@ -1,6 +1,11 @@
 var express = require('express')
+var bodyParser = require('body-parser')
+var request = require('request');
 var app = express()
 var fs = require("fs")
+
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
 
 var agents
 
@@ -18,19 +23,25 @@ app.get('/agent', function (req, res) {
 })
 
 app.put('/agent', function (req, res) {  
-  var newAgent = "";
+  var newAgent = req.body
+  var newAgentId = agentToId(newAgent)
   
-  agents[newAgent] = newAgent
-  console.log("add agent " + newAgent)
+  agents[newAgentId] = newAgent
+  console.log("add agent " + newAgentId)
   res.end(JSON.stringify({"status":"ok","newAgent":newAgent}))
   saveAgents()
 })
 
-app.delete('/agent', function (req, res) {
-  var agentToDelete = ""
-  delete agents[agentToDelete]
+app.delete('/agent/:host/:port', function (req, res) {
+  var agentToDelete = {
+    "host":req.params.host,
+    "port":req.params.port
+  }
   
-  console.log("delete agent " + agentToDelete)
+  var agentToDeleteId = agentToId(agentToDelete)
+  delete agents[agentToDeleteId]
+  
+  console.log("delete agent " + agentToDeleteId)
    res.end(JSON.stringify({"status":"ok","agentToDelete":agentToDelete}))
    
    saveAgents()
@@ -43,13 +54,47 @@ app.get("/stats", function(req,res){
     "totalExecutionTime":0
   }
   
-  res.end(JSON.stringify(stats))
+  var i = 0
+  
+  for(agentId in agents){
+    request("http://" + agentId + "/bam/stats", function (error, response, body) {
+      i++
+      
+      if (!error && response.statusCode == 200) {        
+        stats.numberOfExecutions = body.numberOfExecutions
+        stats.numberOfItemsProcessed = body.numberOfItemsProcessed
+        stats.totalExecutionTime = body.totalExecutionTime        
+      }else{
+        console.log(error + " " + response + " " + body)
+      }
+      
+      if( i == agents.length){
+          res.end(JSON.stringify(stats))
+      }
+    })
+  }  
 })
 
 app.get("/jobs", function(req,res){
   var jobs = []
   
-  res.end(JSON.stringify(jobs))
+  var i = 0
+  
+  for(agentId in agents){
+    request("http://" + agentId + "/bam/jobs", function (error, response, body) {
+      i++
+      
+      if (!error && response.statusCode == 200) {  
+        jobs[jobs.length] = body      
+      }else{
+        console.log(error + " " + response + " " + body)
+      }
+      
+      if( i == agents.length){
+          res.end(JSON.stringify(jobs))
+      }
+    })
+  }  
 })
 
 var server = app.listen(3000, function () {
@@ -66,4 +111,8 @@ function saveAgents(){
        return console.error(err);
    }   
   }) 
+}
+
+function agentToId(agent){
+  return agent.host + ":" + agent.port
 }
