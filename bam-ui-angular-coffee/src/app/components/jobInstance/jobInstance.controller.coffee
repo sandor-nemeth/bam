@@ -1,5 +1,5 @@
 angular.module 'bamUiAngularCoffee'
-  .controller 'JobInstanceController', (jobInstance, $stateParams) ->
+  .controller 'JobInstanceController', (jobs, $stateParams) ->
     'ngInject'
     vm = this
     activate = ->
@@ -9,9 +9,37 @@ angular.module 'bamUiAngularCoffee'
       return
 
     getDetails = ->
-      jobInstance.getJobDetails($stateParams.host, $stateParams.jobName).success (data) ->
-        vm.details = data 
+      jobs.jobDetails($stateParams.host, $stateParams.jobName).success (data) ->
+        vm.details = data
+        allProcessedItems()
+        numberOfStepExecutions()
       return
 
+    numberOfStepExecutions = ->
+      stepExecutions = 0
+      stepExecutions = vm.details[vm.details.length - 1].stepExecutions.length if vm.details.length
+      vm.numberOfSteps = stepExecutions
+
+    allProcessedItems = ->
+      processedItems = 0
+      angular.forEach vm.details, (v) ->
+        processedItems += step.writeCount for step in v.stepExecutions
+        return
+      vm.totalItemsProcessed = processedItems
+
+    processedItems = (jobExecution) ->
+      processedItems = 0
+      processedItems += v.writeCount for v in jobExecution.stepExecutions
+      processedItems
+
+    skippedItems = (jobExecution) ->
+      skippedItems = 0
+      angular.forEach jobExecution.stepExecutions, (v) ->
+        skippedItems += v.readSkipCount + v.processSkipCount + v.writeSkipCount
+        return
+      skippedItems
+
+    vm.processedItems = processedItems
+    vm.skippedItems = skippedItems
     activate()
     return

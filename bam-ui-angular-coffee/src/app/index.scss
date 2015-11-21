@@ -19,3 +19,27 @@ $fa-font-path: "../bower_components/font-awesome/fonts";
  */
 // injector
 // endinjector
+
+.data {
+
+  border-top: 1px solid #efefef;
+  border-bottom: 1px solid #efefef;
+  padding: 8px;
+
+  &.expanded {
+    border-bottom: 0 none;
+  }
+
+  .data-content {
+    padding: 8px 16px;
+  }
+
+  &+.extended-data {
+    border-bottom: 1px solid #efefef;
+    padding: 16px;
+  }
+}
+
+.header-label {
+  font-size: 11px !important;
+}

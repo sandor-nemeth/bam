@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -93,7 +94,7 @@ public class App {
       for (ServerInfo agent : registry.agents) {
         JobStats[] stats = restTemplate.getForObject(url(agent, "/bam/jobs"), JobStats[].class);
         jobStats.addAll(Arrays.stream(stats).map(s -> {
-          s.host = agent.host;
+          s.host = agent.host + ":" + agent.port;
           return s;
         }).collect(Collectors.toList()));
       }
@@ -102,6 +103,19 @@ public class App {
 
     private String url(ServerInfo agent, String target) {
       return "http://" + agent.getHost() + ":" + agent.getPort() + target;
+    }
+
+    @RequestMapping(value = "job/{host}/{port}/{jobName}", method = RequestMethod.GET, produces =
+        MediaType.APPLICATION_JSON_VALUE)
+    public Map[] jobDetails(@PathVariable("host") String host,
+                            @PathVariable("port") int port,
+                            @PathVariable("jobName") String jobName) {
+      for (ServerInfo agent : registry.agents) {
+        if (agent.getHost().equals(host) && agent.getPort() == port) {
+          return restTemplate.getForEntity(url(agent, "/bam/job/" + jobName), Map[].class).getBody();
+        }
+      }
+      return null;
     }
   }
 
